@@ -1,4 +1,5 @@
 import random
+from typing import overload
 
 #Função alocarMemoria passe o tamanho da memoria fisica como argumento
 def alocarMemoria(tMemoriaFisica): 
@@ -8,6 +9,7 @@ def alocarMemoria(tMemoriaFisica):
     #Linha 13 - Calcula a quantidade de memoria fisica disponivel,no caso seria os valores sorteados na variavel
     #espaco utilizado, mas toda vez que uma nova inserção de dados for feita tem que reduzir a quantidade 
     # de memoria fisica disponivel 
+    intermediario = []
     memoria_fisica = [0]*tMemoriaFisica
     espaco_usado = random.randint(tMemoriaFisica*0.1,tMemoriaFisica*0.3)
     memoria_disponivel = len(memoria_fisica) - espaco_usado
@@ -18,6 +20,15 @@ def alocarMemoria(tMemoriaFisica):
         memoria_fisica[i] = 1
     random.shuffle(memoria_fisica)
 
+    #Enquanto for menor que o tamanho da memoria fisica a lista intermediario cria os inidices das posições vazias
+    #na memoria fisica
+    
+    def funcIntermdiario():
+        intermediario.clear()
+        for x in range(len(memoria_fisica)):
+            if memoria_fisica[x] == 0:
+                intermediario.append(x)
+                
     #Linha 24 - Função para alterar a memoria. Enquanto o valor de y for menor que o tamanho da memoria fisica
     #o laço percorre todos as posições da lista e se esse valor for 0 ele altera para 2 que no caso
     # indica que aquele espaço na memoria está alocado
@@ -25,11 +36,12 @@ def alocarMemoria(tMemoriaFisica):
         contador = 0
         for y in range(len(memoria_fisica)):
             if memoria_fisica[y] == 0 and contador != memoria_logica and memoria_disponivel > 0:
-                memoria_fisica[y] = 2
+                funcIntermdiario()
+                memoria_fisica[intermediario[0]] = 2
                 contador +=1
 
     print(memoria_fisica)
-
+    
     #Laço de repetição que pergunta para o usuário qual o tamanho da memoria logica que quer inserir
     # Caso o usuário queira inserir um valor maior do que o tamanho da memoria fisica disponivel 
     # Entra no segundo while que solicita uma nova inserção de dados de um valor que seja menor
